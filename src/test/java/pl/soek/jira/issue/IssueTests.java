@@ -1,4 +1,4 @@
-package pl.soek.jira.backlog;
+package pl.soek.jira.issue;
 
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
@@ -10,9 +10,9 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-public class CreateTaskTests {
+public class IssueTests {
 
-    private static final String PATH_TO_BUG_IMAGE = "src/main/resources/attachments/bug-0001.png";
+    private static final String PATH_TO_BUG_IMAGE = "src/test/resources/attachments/bug-0001.png";
 
     @Test
     public void shouldCreatedBugTask() {
@@ -22,18 +22,19 @@ public class CreateTaskTests {
         String createIssueResponse = given()
             .header("Content-Type","application/json")
             .header("Authorization", JIRA_API_KEY)
-            .body("{\n"
-                    + "    \"fields\": {\n"
-                    + "       \"project\":\n"
-                    + "       {\n"
-                    + "          \"key\": \"SCRUM\"\n"
-                    + "       },\n"
-                    + "       \"summary\": \"Website items are not working- automation Rest Assured\",\n"
-                    + "       \"issuetype\": {\n"
-                    + "          \"name\": \"Bug\"\n"
-                    + "       }\n"
-                    + "   }\n"
-                    + "}")
+            .body("""
+                    {
+                        "fields": {
+                           "project":
+                           {
+                              "key": "SCRUM"
+                           },
+                           "summary": "Website items are not working- automation Rest Assured",
+                           "issuetype": {
+                              "name": "Task"
+                           }
+                       }
+                    }""")
             .log().all()
             .post("rest/api/3/issue").then().log().all().assertThat().statusCode(201).contentType("application/json")
             .extract().response().asString();
