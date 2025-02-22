@@ -1,68 +1,56 @@
 package pl.soek.jira.project;
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Test;
+import pl.soek.jira.model.project.Project;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
+
 import static pl.soek.jira.config.ConstansJira.JIRA_API_KEY;
 import static pl.soek.jira.config.ConstansJira.JIRA_URL;
 
 public class ProjectTests {
 
     @Test
-    public void shouldCreatedProject() {
-        ObjectNode payload = preparePaylaodProject();
+    public void shouldReturnAllProjects() {
+        RestAssured.baseURI = JIRA_URL;
 
+        RequestSpecification request = given()
+                .header("Content-Type",ContentType.JSON)
+                .header("Authorization", JIRA_API_KEY);
+
+        Response response = request.get("rest/api/3/project/");
+
+        response.then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("$", not(empty()))
+                .body("$", hasSize(1))
+                .body("[0].name", equalTo("RestAssured"));
+
+        List<Project> returnedProjects = Arrays.asList(response.as(Project[].class));
+        assert returnedProjects.size() == 1;
+    }
+
+    @Test
+    public void shouldReturnProjectById() {
         RestAssured.baseURI = JIRA_URL;
 
         given()
                 .header("Content-Type","application/json")
                 .header("Authorization", JIRA_API_KEY)
-                .body(payload)
                 .log().all()
-                .post("rest/api/3/project/").then().log().all()
+                .get("rest/api/3/project/10000").then().log().all()
                 .assertThat()
                 .statusCode(200)
                 .contentType("application/json")
                 .extract().response().asString();
-    }
-
-    @Test
-    public void shouldGetAllProjects() {
-        RestAssured.baseURI = JIRA_URL;
-
-        given()
-                .header("Content-Type","application/json")
-                .header("Authorization", JIRA_API_KEY)
-                .log().all()
-                .get("rest/api/3/project/").then().log().all()
-                .assertThat()
-                    .statusCode(200)
-                    .contentType("application/json")
-                .extract().response().asString();
-    }
-
-
-    private static ObjectNode preparePaylaodProject() {
-        JsonNodeFactory jnf = JsonNodeFactory.instance;
-        ObjectNode payload = jnf.objectNode();
-        {
-            payload.put("assigneeType", "PROJECT_LEAD");
-            payload.put("avatarId", 10200);
-            payload.put("categoryId", 10120);
-            payload.put("description", "Cloud migration initiative");
-            payload.put("issueSecurityScheme", 10001);
-            payload.put("key", "EX");
-            payload.put("leadAccountId", "5b10a0effa615349cb016cd8");
-            payload.put("name", "Example");
-            payload.put("notificationScheme", 10021);
-            payload.put("permissionScheme", 10011);
-            payload.put("projectTemplateKey", "com.atlassian.jira-core-project-templates:jira-core-simplified-process-control");
-            payload.put("projectTypeKey", "business");
-            payload.put("url", "http://atlassian.com");
-        }
-        return payload;
     }
 }
