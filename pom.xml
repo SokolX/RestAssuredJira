@@ -18,7 +18,13 @@
         <junit.jupiter.version>5.12.0</junit.jupiter.version>
         <assertj.version>3.27.3</assertj.version>
         <jackson.version>2.16.2</jackson.version>
+        <cucumber-java.version>7.21.1</cucumber-java.version>
+        <cucumber-junit-platform-engine.version>7.14.0</cucumber-junit-platform-engine.version>
+        <junit-platform-suite.version>1.9.3</junit-platform-suite.version>
+        <groovy.version>4.0.25</groovy.version>
+
         <maven-surfire-plugin.version>3.5.2</maven-surfire-plugin.version>
+
     </properties>
 
     <dependencies>
@@ -49,9 +55,34 @@
         </dependency>
 
         <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber-java.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>${cucumber-junit-platform-engine.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>${junit-platform-suite.version}</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>${groovy.version}</version>
         </dependency>
 
     </dependencies>
