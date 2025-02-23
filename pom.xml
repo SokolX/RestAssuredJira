@@ -7,34 +7,18 @@
     <groupId>org.example</groupId>
     <artifactId>RestAssured</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>16</source>
-                    <target>16</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.2</version>
-            </plugin>
-        </plugins>
-    </build>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <encoding>UTF-8</encoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
 
         <restassured.version>5.5.0</restassured.version>
         <junit.jupiter.version>5.12.0</junit.jupiter.version>
         <assertj.version>3.27.3</assertj.version>
         <jackson.version>2.16.2</jackson.version>
-
+        <maven-surfire-plugin.version>3.5.2</maven-surfire-plugin.version>
     </properties>
 
     <dependencies>
@@ -71,4 +55,15 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surfire-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
