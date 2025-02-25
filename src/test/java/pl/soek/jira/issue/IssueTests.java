@@ -2,13 +2,17 @@ package pl.soek.jira.issue;
 
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
+
 import static io.restassured.RestAssured.*;
 import static pl.soek.jira.config.ConstansJira.JIRA_API_KEY;
 import static pl.soek.jira.config.ConstansJira.JIRA_URL;
 
 import java.io.File;
 
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Test;
+import pl.soek.jira.specs.RequestSpec;
 
 public class IssueTests {
 
@@ -19,37 +23,36 @@ public class IssueTests {
 
         RestAssured.baseURI = JIRA_URL;
 
-        String createIssueResponse = given()
-            .header("Content-Type","application/json")
-            .header("Authorization", JIRA_API_KEY)
-            .body("""
-                    {
-                        "fields": {
-                           "project":
-                           {
-                              "key": "SCRUM"
-                           },
-                           "summary": "Website items are not working- automation Rest Assured",
-                           "issuetype": {
-                              "name": "Task"
+        RequestSpecification createIssueRequest = given()
+                .spec(RequestSpec.basedHeader())
+                .body("""
+                        {
+                            "fields": {
+                               "project":
+                               {
+                                  "key": "SCRUM"
+                               },
+                               "summary": "Website items are not working- automation Rest Assured",
+                               "issuetype": {
+                                  "name": "Task"
+                               }
                            }
-                       }
-                    }""")
-            .log().all()
-            .post("rest/api/3/issue").then().log().all().assertThat().statusCode(201).contentType("application/json")
-            .extract().response().asString();
+                        }""");
 
-            JsonPath responseJson = new JsonPath(createIssueResponse);
+        Response createIssueResponse = createIssueRequest
+                .when().post("rest/api/3/issue")
+                .then().assertThat().statusCode(201).contentType("application/json").extract().response();
 
-            String issueId = responseJson.getString("id");
+        JsonPath createIssueResponseJson = new JsonPath(createIssueResponse.asString());
+        String issueId = createIssueResponseJson.getString("id");
 
-            given()
-            .pathParam("key", issueId)
-            .header("X-Atlassian-Token","no-check")
-            .header("Authorization", JIRA_API_KEY)
-                    .multiPart("file", new File(PATH_TO_BUG_IMAGE))
-                    .log().all()
-                    .post("rest/api/3/issue/{key}/attachments")
-                    .then().log().all().assertThat().statusCode(200);
+        given()
+                .pathParam("key", issueId)
+                .header("X-Atlassian-Token", "no-check")
+                .header("Authorization", JIRA_API_KEY)
+                .multiPart("file", new File(PATH_TO_BUG_IMAGE))
+                .log().all()
+                .post("rest/api/3/issue/{key}/attachments")
+                .then().log().all().assertThat().statusCode(200);
     }
 }

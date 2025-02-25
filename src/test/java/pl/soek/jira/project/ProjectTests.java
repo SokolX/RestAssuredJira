@@ -8,6 +8,7 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Test;
 import pl.soek.jira.model.project.Project;
 import pl.soek.jira.specs.ProjectResponseSpec;
+import pl.soek.jira.specs.RequestSpec;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +16,6 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
-import static pl.soek.jira.config.ConstansJira.JIRA_API_KEY;
 import static pl.soek.jira.config.ConstansJira.JIRA_URL;
 
 public class ProjectTests {
@@ -25,8 +25,7 @@ public class ProjectTests {
         RestAssured.baseURI = JIRA_URL;
 
         RequestSpecification request = given()
-                .header("Content-Type",ContentType.JSON)
-                .header("Authorization", JIRA_API_KEY);
+                .spec(RequestSpec.basedHeader());
 
         Response response = request
                 .when().get("rest/api/3/project/")
@@ -41,8 +40,7 @@ public class ProjectTests {
         RestAssured.baseURI = JIRA_URL;
 
         RequestSpecification request = given()
-                .header("Content-Type",ContentType.JSON)
-                .header("Authorization", JIRA_API_KEY);
+                .spec(RequestSpec.basedHeader());
 
         new ResponseSpecBuilder()
                 .expectStatusCode(200)
