@@ -13,7 +13,7 @@ import static io.restassured.RestAssured.given;
 public class ProjectStepDefinitions {
 
     RequestSpecification request;
-    RequestSpec requestSpec;
+    RequestSpec requestSpec = new RequestSpec();
     Response response;
 
     @Given("Get a project with details")
