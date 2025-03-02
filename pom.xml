@@ -19,7 +19,7 @@
         <assertj.version>3.27.3</assertj.version>
         <jackson.version>2.16.2</jackson.version>
         <cucumber-java.version>7.21.1</cucumber-java.version>
-        <cucumber-junit-platform-engine.version>7.14.0</cucumber-junit-platform-engine.version>
+        <cucumber-junit-platform-engine.version>7.15.0</cucumber-junit-platform-engine.version>
         <junit-platform-suite.version>1.9.3</junit-platform-suite.version>
         <groovy.version>4.0.25</groovy.version>
 
@@ -93,6 +93,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surfire-plugin.version}</version>
+                <configuration>
+                    <includes>
+                        <include>**/*TestSuite.java</include>
+                    </includes>
+                    <properties>
+                        <configurationParameters>
+                            cucumber.execution.parallel.enabled=true
+                        </configurationParameters>
+                    </properties>
+                </configuration>
             </plugin>
         </plugins>
     </build>

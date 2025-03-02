@@ -7,7 +7,9 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("pl/soek/jira/features")
-@ConfigurationParameter(key = "cucumber.glue", value = "pl.soek.jira")
+@SelectClasspathResource("features")
+@ConfigurationParameter(
+        key = "cucumber.glue",
+        value = "pl.soek.jira")
 public class CucumberTestRunner {
 }
