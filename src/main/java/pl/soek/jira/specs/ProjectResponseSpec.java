@@ -9,23 +9,24 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class ProjectResponseSpec {
 
-    private static ResponseSpecBuilder successRespose() {
+    public static ResponseSpecBuilder codeHttpResponse(String expectedHttpCode) {
         return new ResponseSpecBuilder()
-                .expectStatusCode(200)
+                .expectStatusCode(Integer.parseInt(expectedHttpCode))
                 .expectContentType(ContentType.JSON);
     }
 
-    public static ResponseSpecification successResponseAllProject() {
-        return successRespose()
+    public static ResponseSpecification successResponseAllProject(String expectedHttpCode) {
+        return codeHttpResponse(expectedHttpCode)
                 .expectBody("$", not(empty()))
                 .expectBody("$", hasSize(1))
                 .expectBody("[0].name", equalTo("RestAssured"))
                 .build();
     }
 
-    public static ResponseSpecification successResponseProjectById() {
-        return successRespose()
-                .expectBody("name", equalTo("RestAssured"))
+    public static ResponseSpecification successResponseProjectById(String expectedHttpCode,
+                                                                   String expectedName) {
+        return codeHttpResponse(expectedHttpCode)
+                .expectBody("name", equalTo(expectedName))
                 .build();
     }
 }
