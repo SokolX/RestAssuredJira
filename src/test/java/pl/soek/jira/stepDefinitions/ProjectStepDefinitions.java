@@ -31,4 +31,10 @@ public class ProjectStepDefinitions {
     public void the_API_returned(String expectedHttpCode) {
         response.then().spec(ProjectResponseSpec.codeHttpResponse(expectedHttpCode).build()).extract().response();
     }
+
+    @When("I call {string}")
+    public void user_call_get_request(String resource) {
+        ApiResourcesEnum apiResource = ApiResourcesEnum.valueOf(resource);
+        response = request.when().get(apiResource.getResource());
+    }
 }

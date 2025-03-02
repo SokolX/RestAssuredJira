@@ -9,3 +9,11 @@ Feature: Jira Project API
       | projectId | expectedHttpCode |
       | 10000     | 200              |
       | 99999     | 404              |
+
+  Scenario Outline: Get all projects using API
+    Given Jira API is active
+    When I call "GetProjectAPI"
+    Then the API call status "<expectedHttpCode>"
+    Examples:
+      | expectedHttpCode |
+      | 200              |
