@@ -3,7 +3,7 @@ package pl.soek.jira.config;
 public enum ApiResourcesEnum {
 
     AddIssueAPI("rest/api/3/issue"),
-    GetProjectAPI("rest/api/3/project/");
+    ProjectAPI("rest/api/3/project/");
 
     private final String resource;
 

@@ -1,7 +1,6 @@
 package pl.soek.jira.specs;
 
 import io.restassured.builder.ResponseSpecBuilder;
-import io.restassured.http.ContentType;
 import io.restassured.specification.ResponseSpecification;
 
 import static org.hamcrest.Matchers.*;
@@ -11,8 +10,7 @@ public class ProjectResponseSpec {
 
     public static ResponseSpecBuilder codeHttpResponse(String expectedHttpCode) {
         return new ResponseSpecBuilder()
-                .expectStatusCode(Integer.parseInt(expectedHttpCode))
-                .expectContentType(ContentType.JSON);
+                .expectStatusCode(Integer.parseInt(expectedHttpCode));
     }
 
     public static ResponseSpecification successResponseAllProject(String expectedHttpCode) {
