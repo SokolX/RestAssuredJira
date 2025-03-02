@@ -3,28 +3,22 @@ package pl.soek.jira.stepDefinitions;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import pl.soek.jira.specs.ProjectResponseSpec;
+import pl.soek.jira.specs.RequestSpec;
 
 import static io.restassured.RestAssured.given;
-import static pl.soek.jira.config.ConstansJira.JIRA_API_KEY;
-import static pl.soek.jira.config.ConstansJira.JIRA_URL;
 
 public class ProjectStepDefinitions {
 
     RequestSpecification request;
+    RequestSpec requestSpec;
     Response response;
 
     @Given("Get a project with details")
     public void get_a_project_with_details() {
-        RestAssured.baseURI = JIRA_URL;
-
-        request = given()
-                .header("Content-Type", ContentType.JSON)
-                .header("Authorization", JIRA_API_KEY);
+        request = given().spec(requestSpec.requestSpecBuilder().build());
     }
 
     @When("user calls Get http method project")
