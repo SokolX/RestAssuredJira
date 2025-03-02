@@ -5,6 +5,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import pl.soek.jira.config.ApiResourcesEnum;
 import pl.soek.jira.specs.ProjectResponseSpec;
 
 import static io.restassured.RestAssured.given;
@@ -20,9 +21,10 @@ public class ProjectStepDefinitions {
         request = given().spec(requestSpecBuilder().build());
     }
 
-    @When("I GET project which {string}")
-    public void user_calls_GetProject_with_Get_httpRequest(String projectId) {
-        response = request.when().get("rest/api/3/project/" + projectId);
+    @When("I call {string} which {string}")
+    public void user_call_get_request_with_id(String resource, String projectId) {
+        ApiResourcesEnum apiResource = ApiResourcesEnum.valueOf(resource);
+        response = request.when().get(apiResource.getResource() + projectId);
     }
 
     @Then("the API call status {string}")

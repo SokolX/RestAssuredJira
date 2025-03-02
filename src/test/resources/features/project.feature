@@ -3,7 +3,7 @@ Feature: Jira Project API
 
   Scenario Outline: Get a details project using API
     Given Jira API is active
-    When I GET project which "<projectId>"
+    When I call "GetProjectAPI" which "<projectId>"
     Then the API call status "<expectedHttpCode>"
     Examples:
       | projectId | expectedHttpCode |
