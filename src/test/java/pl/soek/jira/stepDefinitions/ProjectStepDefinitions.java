@@ -39,7 +39,7 @@ public class ProjectStepDefinitions {
     }
 
     private void chooseHttpRequestMethod(String methodHttp, String projectId, ApiResourcesEnum apiResource) {
-        switch (methodHttp) {
+        switch (methodHttp.toUpperCase()) {
             case "GET":
                 response = request.when().get(apiResource.getResource() + projectId);
                 break;
