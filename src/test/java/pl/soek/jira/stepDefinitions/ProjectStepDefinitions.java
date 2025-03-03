@@ -16,25 +16,15 @@ public class ProjectStepDefinitions {
     RequestSpecification request;
     Response response;
 
-    @Given("Jira API is active")
-    public void get_a_project_with_details() {
+    @Given("I have a JIRA address and a valid API KEY")
+    public void given_jira_address_and_valid_api_key() {
         request = given().spec(requestSpecBuilder().build());
     }
 
-    @Given("Jira API is active DELETE")
-    public void delete_a_project() {
-        request = given().spec(requestSpecBuilder().build());
-    }
-
-    @Given("Jira API is active POST")
-    public void post_a_project_with_details() {
-        request = given().spec(requestSpecBuilder().build());
-    }
-
-    @When("I call GET {string} which {string}")
-    public void user_call_get_request_with_id(String resource, String projectId) {
+    @When("I call {string} {string} which {string}")
+    public void user_call_http_request_method_with_id(String methodHttp, String resource, String projectId) {
         ApiResourcesEnum apiResource = ApiResourcesEnum.valueOf(resource);
-        response = request.when().get(apiResource.getResource() + projectId);
+        chooseHttpRequestMethod(methodHttp, projectId, apiResource);
     }
 
     @Then("the API call status {string}")
@@ -48,15 +38,17 @@ public class ProjectStepDefinitions {
         response = request.when().get(apiResource.getResource());
     }
 
-    @When("I call DELETE {string} which {string}")
-    public void user_call_put_request(String resource, String projectId) {
-        ApiResourcesEnum apiResource = ApiResourcesEnum.valueOf(resource);
-        response = request.when().log().all().delete(apiResource.getResource() + projectId);
-    }
-
-    @When("I call POST {string} which {string}")
-    public void user_call_post_request(String resource, String projectId) {
-        ApiResourcesEnum apiResource = ApiResourcesEnum.valueOf(resource);
-        response = request.when().log().all().post(apiResource.getResource() + projectId + "/restore");
+    private void chooseHttpRequestMethod(String methodHttp, String projectId, ApiResourcesEnum apiResource) {
+        switch (methodHttp) {
+            case "GET":
+                response = request.when().get(apiResource.getResource() + projectId);
+                break;
+            case "POST":
+                response = request.when().post(apiResource.getResource() + projectId + "/restore");
+                break;
+            case "DELETE":
+                response = request.when().delete(apiResource.getResource() + projectId);
+                break;
+        }
     }
 }
